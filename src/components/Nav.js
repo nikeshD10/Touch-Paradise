@@ -1,53 +1,108 @@
-import React from "react";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import ExploreOutlinedIcon from "@mui/icons-material/ExploreOutlined";
-import ContactPageOutlinedIcon from "@mui/icons-material/ContactPageOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import InstagramIcon from "@mui/icons-material/Instagram";
-import MailOutlineIcon from "@mui/icons-material/MailOutline";
+import * as React from "react";
+import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
+import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Button from "@mui/material/Button";
+import Logo from "../assets/logo-removebg-preview.png";
+const drawerWidth = 240;
+const navItems = ["Home", "About", "Contact", "Explore"];
 
-function Nav() {
+function DrawerAppBar(props) {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
+  };
+
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <div className="flex justify-center">
+        <img src={Logo} alt={"touch paradise"} className="my-2 h-12" />
+      </div>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <ListItemText primary={item} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
   return (
-    <>
-      <ul className="h-full fixed bg-slate-800 w-24  grid grid-cols-1 nav">
-        <li className="nav-component">
-          <h1 className="text-1xl font-Oswald text-red-600 font-bold text-lg mt-6">
-            Touch
-            <br />
-            Paradise
-          </h1>
-        </li>
-        <li className="nav-component">
-          <SearchOutlinedIcon color="primary" />
-        </li>
-        <li className="nav-component">
-          <ExploreOutlinedIcon color="primary" />
-        </li>
-        <li className="nav-component">
-          <ContactPageOutlinedIcon color="primary" />
-        </li>
-        <li className="nav-component">
-          <PersonOutlinedIcon color="primary" />
-        </li>
-        <li className="nav-component">
-          <div className=" shadow-indigo-500 shadow-2xl	hover:shadow-lg shadow border-solid border-2	border-white	rounded-lg mr-7 p-2">
-            <ul>
-              <li className="pt-3">
-                <FacebookIcon color="primary" />
-              </li>
-              <li className="pt-3">
-                <InstagramIcon color="primary" />
-              </li>
-              <li className="pt-3">
-                <MailOutlineIcon color="primary" />
-              </li>
-            </ul>
+    <Box sx={{ display: "flex" }}>
+      <AppBar component="nav" color="blue">
+        <Toolbar>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { sm: "none" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+
+          <div className="sm:block xs:hidden grow ">
+            <img src={Logo} alt={"touch paradise"} className="my-2 h-12" />
           </div>
-        </li>
-      </ul>
-    </>
+
+          <Box sx={{ display: { xs: "none", sm: "block" } }}>
+            {navItems.map((item) => (
+              <Button key={item} sx={{ color: "#fff" }}>
+                {item}
+              </Button>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
+      <Box component="nav">
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </Box>
+      <Box sx={{ marginBottom: { lg: 8, xs: 7 } }}></Box>
+    </Box>
   );
 }
 
-export default Nav;
+DrawerAppBar.propTypes = {
+  /**
+   * Injected by the documentation to work in an iframe.
+   * You won't need it on your project.
+   */
+  window: PropTypes.func,
+};
+
+export default DrawerAppBar;

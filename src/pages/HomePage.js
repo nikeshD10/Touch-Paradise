@@ -4,7 +4,7 @@ import Nav from "../components/Nav";
 
 function HomePage() {
   return (
-    <div className="flex grid grid-cols-1">
+    <div className="container grid grid-rows-12">
       <Nav />
       <Body />
     </div>
